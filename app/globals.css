@@ -1,0 +1,96 @@
+:root {
+  --bg: #07070c;
+  --fg: #f1f0f7;
+  --muted: #9b99ad;
+  --line: rgba(255, 255, 255, 0.12);
+  --accent: #ff8a5c;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+code {
+  font-family: ui-monospace, "Cascadia Code", Menlo, monospace;
+  font-size: 0.9em;
+  color: var(--accent);
+}
+
+.eyebrow {
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1.25rem;
+}
+
+/* Contenedor del canvas de Three.js */
+.canvas-fill { position: absolute; inset: 0; }
+.canvas-fill canvas { display: block; width: 100%; height: 100%; }
+.clickable { cursor: crosshair; }
+
+/* Demo 01 */
+.hero { position: relative; height: 100vh; overflow: hidden; }
+.hero-content {
+  position: relative; z-index: 1; height: 100%;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 0 6vw 10vh; pointer-events: none;
+}
+.hero h1 {
+  font-size: clamp(3rem, 9vw, 9rem);
+  line-height: 0.92; font-weight: 600; letter-spacing: -0.04em;
+}
+.line-mask { display: block; overflow: hidden; }
+.hero-line { display: block; }
+.hero-sub { margin-top: 1.5rem; color: var(--muted); }
+
+/* Demo 02 */
+.pinned { position: relative; height: 100vh; overflow: hidden; }
+.pinned-content {
+  position: absolute; left: 6vw; top: 50%; transform: translateY(-50%);
+  z-index: 1; max-width: 34rem; pointer-events: none;
+}
+.pinned-content h2 {
+  font-size: clamp(1.8rem, 3.6vw, 3.2rem);
+  line-height: 1.05; font-weight: 500; letter-spacing: -0.02em;
+}
+.pm-step-2 { position: absolute; top: 2.2rem; visibility: hidden; }
+
+/* Demo 03 */
+.terrain { position: relative; height: 100vh; overflow: hidden; }
+.terrain-content {
+  position: absolute; top: 10vh; left: 0; right: 0; text-align: center;
+  z-index: 1; pointer-events: none;
+}
+.terrain-content h2 { font-size: clamp(1.8rem, 4vw, 3.4rem); font-weight: 500; letter-spacing: -0.02em; }
+
+/* Ficha técnica */
+.info { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 12vh 6vw; }
+.info-inner { max-width: 60rem; margin: 0 auto; }
+.info h3 { font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 500; letter-spacing: -0.02em; margin-bottom: 1rem; }
+.info-summary { color: var(--muted); line-height: 1.65; max-width: 44rem; margin-bottom: 2.5rem; }
+.tool-list { list-style: none; border-top: 1px solid var(--line); }
+.tool-list li {
+  display: grid; grid-template-columns: minmax(12rem, 18rem) 1fr; gap: 1.5rem;
+  padding: 1rem 0; border-bottom: 1px solid var(--line);
+}
+.tool-name { font-weight: 600; }
+.tool-role { color: var(--muted); }
+.info-file { margin-top: 2rem; color: var(--muted); font-size: 0.9rem; }
+
+.footer { padding: 10vh 6vw; text-align: center; color: var(--muted); }
+
+@media (max-width: 640px) {
+  .tool-list li { grid-template-columns: 1fr; gap: 0.25rem; }
+  .info { padding: 8vh 16px; }
+  .hero-content, .pinned-content { padding-left: 16px; padding-right: 16px; left: 0; }
+}

@@ -7,6 +7,10 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Instancia compartida para que otras partes (transiciones de página) puedan usarla
+let lenisInstance = null;
+export const getLenis = () => lenisInstance;
+
 /**
  * Scroll suave con Lenis, conectado al reloj de GSAP.
  * Es el mismo patrón que usa Trionn: Lenis avanza en gsap.ticker y avisa a
@@ -17,6 +21,7 @@ export default function SmoothScroll({ children }) {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const lenis = new Lenis({ lerp: 0.09 });
+    lenisInstance = lenis;
     lenis.on("scroll", ScrollTrigger.update);
     const raf = (time) => lenis.raf(time * 1000);
     gsap.ticker.add(raf);
@@ -25,6 +30,7 @@ export default function SmoothScroll({ children }) {
     return () => {
       gsap.ticker.remove(raf);
       lenis.destroy();
+      lenisInstance = null;
     };
   }, []);
 

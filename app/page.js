@@ -1,6 +1,8 @@
 import ShaderBackground from "@/components/demos/ShaderBackground";
 import ParticleMorph from "@/components/demos/ParticleMorph";
 import WaveTerrain from "@/components/demos/WaveTerrain";
+import CurvedGallery from "@/components/demos/CurvedGallery";
+import TransitionsDemo from "@/components/demos/TransitionsDemo";
 import DemoInfo from "@/components/DemoInfo";
 
 const BASE = [
@@ -61,8 +63,43 @@ export default function Home() {
         file="components/demos/WaveTerrain.js"
       />
 
+      <CurvedGallery />
+      <DemoInfo
+        number="04"
+        title="Imágenes que se curvan con el scroll"
+        summary="Las imágenes no son etiquetas <img>: son planos de Three.js con la imagen como textura, así el vertex shader puede doblarlas. Se curvan como un cilindro según su posición y se arquean como tela según la velocidad del scroll. Es la misma técnica de las tarjetas de Trionn."
+        tools={[
+          { name: "Three.js PlaneGeometry (32 × 32)", role: "Planos con subdivisiones suficientes para poder doblarse." },
+          { name: "GLSL (vertex shader)", role: "Curva de cilindro, flexión por velocidad y abombado en hover." },
+          { name: "GLSL (fragment shader)", role: "Esquinas redondeadas con SDF, separación RGB y paso de gris a color." },
+          { name: "GSAP ScrollTrigger (pin + scrub)", role: "Convierte el scroll vertical en movimiento horizontal de la galería." },
+          { name: "Three.js Raycaster + gsap.to", role: "Detecta la tarjeta bajo el mouse y anima su uHover." },
+          { name: "CanvasTexture", role: "Genera las imágenes con <canvas>. En un proyecto real usarías TextureLoader con tus fotos." },
+          ...BASE,
+        ]}
+        file="components/demos/CurvedGallery.js"
+      />
+
+      <TransitionsDemo />
+      <DemoInfo
+        number="05"
+        title="Transiciones, cursor y botones magnéticos"
+        summary="Al abrir un proyecto, cinco columnas cubren la pantalla, Next.js cambia de ruta y las columnas se retiran. El cursor es un punto y un anillo que siguen al mouse con distinta inercia, y crece o muestra texto según el elemento. Los botones magnéticos se desplazan hacia el puntero y regresan con un rebote elástico."
+        tools={[
+          { name: "GSAP timeline", role: "Salida y entrada de las columnas de la transición." },
+          { name: "Next.js useRouter + usePathname", role: "Navega cuando la pantalla está cubierta y detecta cuándo cargó la página nueva." },
+          { name: "React Context", role: "Comparte la función navigate() con todos los <TransitionLink>." },
+          { name: "GSAP quickTo", role: "Cursor (punto rápido, anillo lento) y desplazamiento de los botones magnéticos." },
+          { name: "GSAP elastic.out", role: "Rebote del botón al soltarlo." },
+          { name: "GSAP SplitText", role: "Divide el título del proyecto en letras y las anima desde una máscara." },
+          { name: "CustomEvent", role: "Permite que WebGL (demo 04) cambie el texto del cursor." },
+          ...BASE,
+        ]}
+        file="components/PageTransition.js · Cursor.js · Magnetic.js"
+      />
+
       <footer className="footer">
-        <p>Todo lo que ves es procedural: no se usó ningún modelo de Blender ni imagen.</p>
+        <p>Todo lo que ves está hecho con código: no se usó ningún modelo de Blender ni archivo de imagen.</p>
       </footer>
     </main>
   );

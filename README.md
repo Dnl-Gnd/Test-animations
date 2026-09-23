@@ -33,6 +33,21 @@ Abre http://localhost:3000
 | 04 | Imágenes que se curvan | `components/demos/CurvedGallery.js` | Planos con textura + vertex shader (cilindro y flexión por velocidad) + ScrollTrigger horizontal |
 | 05 | Transiciones y cursor | `components/PageTransition.js`, `Cursor.js`, `Magnetic.js` | GSAP timeline + App Router, cursor con quickTo, botones magnéticos con elastic.out |
 
+## Animaciones de las páginas de proyecto
+
+Cada página en `/proyecto/[slug]` tiene su propio par de animaciones debajo del título, con su ficha técnica.
+
+| Proyecto | Animación | Archivo | Técnica principal |
+|---|---|---|---|
+| Aurora | Cielo de aurora boreal | `components/projects/aurora/AuroraSky.js` | Fragment shader con 4 capas de ruido, estrellas por hash y montañas |
+| Aurora | Marquesina por velocidad | `components/projects/aurora/VelocityMarquee.js` | Tween infinito + `ScrollTrigger.getVelocity()` para velocidad, dirección y skew |
+| Nébula | Galaxia de partículas | `components/projects/nebula/Galaxy.js` | 60 000 `Points` en espiral + rotación diferencial en el vertex shader + cámara por scroll |
+| Nébula | Texto que se revela | `components/projects/nebula/WordReveal.js` | SplitText por palabras + ScrollTrigger con scrub |
+| Coral | Rastro de imágenes | `components/projects/coral/ImageTrail.js` | Pool de `<img>` reutilizadas + timeline de GSAP por cada aparición |
+| Coral | Tarjetas con inclinación 3D | `components/projects/coral/TiltCards.js` | `quickTo` en rotationX/Y + brillo con variables CSS + `ScrollTrigger.batch` |
+
+`components/projects/ProjectSections.js` decide qué secciones van en cada página.
+
 ## Estructura
 
 ```
@@ -48,11 +63,13 @@ components/
   Magnetic.js          Envoltorio para botones magnéticos
   PageTransition.js    Provider + <TransitionLink> para transiciones entre páginas
   ProjectHero.js       Página de proyecto con título animado (SplitText)
+  projects/            Animaciones propias de cada página de proyecto
   demos/               Una demo por archivo
 lib/
   createStage.js       Renderer + resize + loop compartido (se pausa fuera de pantalla)
   glsl/noise.js        Simplex noise 3D (MIT) usado por todos los shaders
   projects.js          Datos de ejemplo de los proyectos
+  art.js               Genera imágenes abstractas con <canvas>
 ```
 
 ## Cómo agregar una demo nueva

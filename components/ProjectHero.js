@@ -12,8 +12,9 @@ gsap.registerPlugin(SplitText);
 /**
  * Página de proyecto. El título se divide en letras con SplitText y cada letra
  * sube desde una máscara cuando termina la transición de entrada.
+ * Debajo del hero se renderizan las secciones propias de cada proyecto (children).
  */
-export default function ProjectHero({ project, next }) {
+export default function ProjectHero({ project, next, children }) {
   const root = useRef(null);
 
   useGSAP(
@@ -30,6 +31,7 @@ export default function ProjectHero({ project, next }) {
 
   return (
     <main ref={root} className="project-page" style={{ "--a": project.a, "--b": project.b }}>
+      <header className="project-top">
       <div className="project-bg" />
       <nav className="project-nav project-hero-fade">
         <Magnetic>
@@ -42,8 +44,13 @@ export default function ProjectHero({ project, next }) {
         <p className="eyebrow project-hero-fade">Proyecto · {project.year}</p>
         <h1 className="project-hero-title">{project.title}</h1>
         <p className="project-hero-text project-hero-fade">{project.text}</p>
+        <p className="project-scroll-hint project-hero-fade">Haz scroll ↓</p>
       </div>
-      <footer className="project-next project-hero-fade">
+      </header>
+
+      {children}
+
+      <footer className="project-next">
         <span className="eyebrow">Siguiente</span>
         <TransitionLink href={`/proyecto/${next.slug}`} label={next.title} className="project-next-link" data-cursor-label="Ir">
           {next.title}

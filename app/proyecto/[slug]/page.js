@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { PROJECTS, getProject } from "@/lib/projects";
 import ProjectHero from "@/components/ProjectHero";
+import ProjectSections from "@/components/projects/ProjectSections";
 
 export function generateStaticParams() {
   return PROJECTS.map((p) => ({ slug: p.slug }));
@@ -19,5 +20,9 @@ export default async function ProjectPage({ params }) {
 
   const index = PROJECTS.indexOf(project);
   const next = PROJECTS[(index + 1) % PROJECTS.length];
-  return <ProjectHero project={project} next={next} />;
+  return (
+    <ProjectHero project={project} next={next}>
+      <ProjectSections slug={project.slug} />
+    </ProjectHero>
+  );
 }

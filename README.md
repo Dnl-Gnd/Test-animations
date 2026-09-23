@@ -45,6 +45,14 @@ Cada página en `/proyecto/[slug]` tiene su propio par de animaciones debajo del
 | Nébula | Texto que se revela | `components/projects/nebula/WordReveal.js` | SplitText por palabras + ScrollTrigger con scrub |
 | Coral | Rastro de imágenes | `components/projects/coral/ImageTrail.js` | Pool de `<img>` reutilizadas + timeline de GSAP por cada aparición |
 | Coral | Tarjetas con inclinación 3D | `components/projects/coral/TiltCards.js` | `quickTo` en rotationX/Y + brillo con variables CSS + `ScrollTrigger.batch` |
+| Marea | Agua simulada en la GPU | `components/projects/marea/WaterRipples.js` | Ecuación de onda en dos render targets (ping-pong) + refracción |
+| Marea | Transición líquida | `components/projects/marea/LiquidSlideshow.js` | Dos texturas mezcladas con ruido + ScrollTrigger con pin, scrub y snap |
+| Ámbar | Resina con refracción | `components/projects/ambar/ResinBlob.js` | `MeshPhysicalMaterial` con transmisión + deformación con `onBeforeCompile` |
+| Ámbar | Línea de tiempo | `components/projects/ambar/DrawTimeline.js` | DrawSVGPlugin + MotionPathPlugin + contadores |
+| Glaciar | Hielo que se fragmenta | `components/projects/glaciar/IceShatter.js` | Atributos por cara + rotación en el vertex shader + normales con `dFdx`/`dFdy` |
+| Glaciar | Cuadrícula ↔ lista | `components/projects/glaciar/FlipGrid.js` | GSAP Flip (layout y filtros) + `backdrop-filter` |
+| Brasa | Fuego y chispas | `components/projects/brasa/FireEmbers.js` | Fragment shader con fbm y rampa de color + `Points` calculados en el shader |
+| Brasa | Sonido interactivo | `components/projects/brasa/EmberSynth.js` | Web Audio (osciladores, delay, analizador) + visualizador en Canvas 2D |
 
 `components/projects/ProjectSections.js` decide qué secciones van en cada página.
 

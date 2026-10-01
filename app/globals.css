@@ -411,3 +411,42 @@ kbd {
   .tl-item.is-left .tl-node, .tl-item.is-right .tl-node { left: 0; right: auto; }
   .synth-pads { grid-template-columns: repeat(4, 1fr); }
 }
+
+/* ---------- Animaciones 3D (home) ---------- */
+.models3d { padding: 16vh 6vw; border-top: 1px solid var(--line); }
+.models3d-inner { max-width: 70rem; margin: 0 auto; }
+.models3d h2 { font-size: clamp(2rem, 4vw, 3.4rem); font-weight: 500; letter-spacing: -0.02em; margin-bottom: 3rem; }
+.models3d-grid { list-style: none; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.model-card {
+  position: relative; display: flex; flex-direction: column; gap: 0.5rem; min-height: 240px; padding: 1.5rem;
+  border-radius: 20px; border: 1px solid var(--line); color: var(--fg); text-decoration: none;
+  overflow: hidden; isolation: isolate;
+}
+.model-card::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; opacity: 0.25;
+  background: radial-gradient(80% 80% at 80% 0%, var(--a), transparent 70%),
+              radial-gradient(70% 70% at 0% 100%, var(--b), transparent 70%);
+  transition: opacity 0.5s cubic-bezier(0.7, 0, 0.2, 1), transform 0.5s cubic-bezier(0.7, 0, 0.2, 1);
+}
+.model-card:hover::before { opacity: 0.8; transform: scale(1.1); }
+.model-card-num { font-family: ui-monospace, monospace; color: var(--muted); }
+.model-card-title { margin-top: auto; font-size: clamp(1.6rem, 2.6vw, 2.2rem); font-weight: 600; letter-spacing: -0.03em; }
+.model-card-tag { font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.model-card.is-pending { border-style: dashed; }
+.model-card.is-pending::before { opacity: 0.1; }
+.model-card.is-pending:hover::before { opacity: 0.35; }
+
+/* ---------- Páginas 3D ---------- */
+.pluma-section { position: relative; height: 100vh; overflow: hidden; background: #020208; }
+.pluma-copy { position: absolute; left: 6vw; bottom: 10vh; z-index: 1; width: min(28rem, calc(100vw - 32px)); pointer-events: none; }
+.pluma-copy h2 { font-size: clamp(1.8rem, 3.4vw, 3rem); font-weight: 500; letter-spacing: -0.02em; line-height: 1.05; }
+.pluma-steps { position: relative; min-height: 7rem; }
+.pluma-step { position: absolute; top: 0; left: 0; right: 0; }
+.pluma-step-2, .pluma-step-3 { visibility: hidden; }
+.model-pending { padding: 20vh 6vw; text-align: center; border-top: 1px solid var(--line); }
+.model-pending h2 { font-size: clamp(1.6rem, 3vw, 2.6rem); font-weight: 500; letter-spacing: -0.02em; color: var(--muted); }
+
+@media (max-width: 640px) {
+  .models3d, .model-pending { padding-left: 16px; padding-right: 16px; }
+  .pluma-copy { left: 16px; right: 16px; }
+}

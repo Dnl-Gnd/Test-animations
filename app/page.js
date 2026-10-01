@@ -4,6 +4,7 @@ import WaveTerrain from "@/components/demos/WaveTerrain";
 import CurvedGallery from "@/components/demos/CurvedGallery";
 import TransitionsDemo from "@/components/demos/TransitionsDemo";
 import DemoInfo from "@/components/DemoInfo";
+import Models3DLinks from "@/components/Models3DLinks";
 
 const BASE = [
   { name: "Next.js + React", role: "Estructura de la página y componentes." },
@@ -98,8 +99,10 @@ export default function Home() {
         file="components/PageTransition.js · Cursor.js · Magnetic.js"
       />
 
+      <Models3DLinks />
+
       <footer className="footer">
-        <p>Todo lo que ves está hecho con código: no se usó ningún modelo de Blender ni archivo de imagen.</p>
+        <p>Las demos de esta página están hechas solo con código: no se usó ningún modelo de Blender ni archivo de imagen.</p>
       </footer>
     </main>
   );

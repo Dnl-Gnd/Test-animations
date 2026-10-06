@@ -6,8 +6,12 @@ import "@fontsource/michroma/400.css";
 import { useRef, useState } from "react";
 import * as THREE from "three";
 import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { createStage, prefersReducedMotion } from "@/lib/createStage";
+import { getLenis } from "@/components/SmoothScroll";
+
+gsap.registerPlugin(ScrollTrigger);
 
 // ---------------------------------------------------------------------------
 // Datos del lugar
@@ -264,18 +268,19 @@ const IconMap = () => (
  *    agua, relieve, sombra de nubes y atmósfera. Las nubes son una segunda esfera.
  * 2. El pin es HTML: en cada frame se proyecta la latitud/longitud de Whittier a
  *    la pantalla y se oculta cuando queda detrás del globo.
- * 3. Al hacer clic, una timeline de GSAP gira el globo hasta dejar Whittier de
- *    frente, la cámara se lanza hacia el suelo (expo.in = acelera) atravesando
- *    las nubes y un post-procesado aplica desenfoque radial. Al llegar, el mapa
- *    de Google aparece desde el mismo desenfoque y queda a pantalla completa.
- * 4. "Volver al globo" reproduce la misma timeline al revés.
+ * 3. Con el scroll (sección fijada, scrub) una timeline de GSAP gira el globo
+ *    hasta dejar Whittier de frente, la cámara se lanza hacia el suelo (expo.in =
+ *    acelera) atravesando las nubes y un post-procesado aplica desenfoque radial.
+ *    Al llegar, el mapa de Google aparece desde el mismo desenfoque, queda a
+ *    pantalla completa y entonces aparece la ficha del taller.
+ * 4. Al subir, la misma timeline corre al revés y se vuelve al globo.
  */
 export default function GlobePrestige() {
   const wrap = useRef(null);
   const canvasBox = useRef(null);
   const pinRef = useRef(null);
   const iframeRef = useRef(null);
-  const actions = useRef({ travel: () => {}, back: () => {} });
+  const actions = useRef({ travel: () => {} });
   const [filter, setFilter] = useState("All");
 
   useGSAP(
@@ -517,18 +522,30 @@ export default function GlobePrestige() {
         },
       });
 
-      // --- Timeline del viaje (se reproduce al revés para volver) ---
+      // --- Timeline del viaje, controlada por el scroll (al subir corre al revés) ---
       const q = gsap.utils.selector(section);
+      const mapEl = q(".globo-map")[0];
       const tl = gsap.timeline({
-        paused: true,
-        onComplete: () => {
-          state.mapOpen = true;
+        scrollTrigger: {
+          trigger: section,
+          start: "top top",
+          end: "+=300%",
+          scrub: 1,
+          pin: true,
+          onUpdate: (self) => {
+            // Carga el mapa con anticipación, antes de que la cámara llegue al suelo
+            if (self.progress > 0.15 && !iframeRef.current.src) iframeRef.current.src = MAP_EMBED;
+          },
         },
-        onReverseComplete: () => {
-          gsap.set(q(".globo-map"), { pointerEvents: "none" });
+        onUpdate: () => {
+          // Se usa el progreso de la timeline (no el del scroll) porque scrub la suaviza:
+          // el mapa solo se puede usar cuando ya está completo y entonces se deja de dibujar el globo
+          const done = tl.progress() > 0.74; // 0.74 ≈ el mapa ya cubre toda la pantalla
+          state.mapOpen = done;
+          mapEl.style.pointerEvents = done ? "auto" : "none";
         },
       });
-      tl.to(q(".globo-copy"), { autoAlpha: 0, y: 20, duration: 0.45, ease: "power2.in", stagger: 0.05 }, 0)
+      tl.to(q(".globo-copy"), { autoAlpha: 0, y: 20, duration: 0.45, ease: "power2.in" }, 0)
         .to(state, { align: 1, duration: 1.1, ease: "power2.inOut" }, 0)
         // La cámara se lanza al suelo: lenta al inicio, cada vez más rápida
         .to(state, { dist: ARRIVAL_DIST, duration: 1.7, ease: "expo.in" }, 0.85)
@@ -537,21 +554,19 @@ export default function GlobePrestige() {
         .fromTo(
           q(".globo-map"),
           { autoAlpha: 0, scale: 2.4, filter: "blur(18px) brightness(1.6)" },
-          { autoAlpha: 1, scale: 1, filter: "blur(0px) brightness(1)", duration: 1.0, ease: "expo.out", pointerEvents: "auto" },
+          { autoAlpha: 1, scale: 1, filter: "blur(0px) brightness(1)", duration: 1.0, ease: "expo.out" },
           2.35
         )
-        .fromTo(q(".globo-map-card"), { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.6, ease: "power3.out" }, 2.9)
         // La ficha del taller solo aparece cuando el mapa ya ocupa toda la pantalla
-        .fromTo(q(".globo-card"), { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.6, ease: "power3.out" }, 3.35);
+        .fromTo(q(".globo-card"), { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.6, ease: "power3.out" }, 3.35)
+        .to({}, { duration: 0.6 }); // pausa con el mapa abierto antes de soltar la sección
 
+      // Clic en el pin: hace el scroll hasta el final del viaje
       actions.current.travel = () => {
-        if (tl.isActive() && !tl.reversed()) return;
-        if (!iframeRef.current.src) iframeRef.current.src = MAP_EMBED; // carga el mapa durante el vuelo
-        tl.timeScale(reduced ? 3 : 1).play();
-      };
-      actions.current.back = () => {
-        state.mapOpen = false;
-        tl.timeScale(reduced ? 3 : 1.35).reverse();
+        const end = tl.scrollTrigger.end;
+        const lenis = getLenis();
+        if (lenis) lenis.scrollTo(end, { duration: reduced ? 0.6 : 2.4 });
+        else window.scrollTo({ top: end, behavior: "smooth" });
       };
 
       return () => {
@@ -569,7 +584,6 @@ export default function GlobePrestige() {
   );
 
   const travel = () => actions.current.travel();
-  const back = () => actions.current.back();
 
   return (
     <section ref={wrap} className="globo-section">
@@ -632,19 +646,6 @@ export default function GlobePrestige() {
           allowFullScreen
           referrerPolicy="strict-origin-when-cross-origin"
         />
-        <div className="globo-map-card">
-          <p className="globo-map-kicker">{PLACE.city}, CA</p>
-          <h3>{PLACE.name}</h3>
-          <p>{PLACE.address.join(" ")}</p>
-          <div className="globo-map-actions">
-            <button type="button" className="btn btn-ghost" onClick={back}>
-              ← Volver al globo
-            </button>
-            <a className="btn btn-solid globo-btn-orange" href={PLACE.directionsUrl} target="_blank" rel="noreferrer">
-              Cómo llegar
-            </a>
-          </div>
-        </div>
       </div>
     </section>
   );

@@ -61,14 +61,14 @@ function GloboPrestige() {
       <DemoInfo
         kicker="Globo → Prestige"
         title="Del globo terráqueo al taller, a toda velocidad"
-        summary="La Tierra es una esfera con un shader propio que mezcla cinco texturas de la NASA: el día (Blue Marble), las luces de ciudades en el lado nocturno (Black Marble), una máscara de agua para el reflejo del sol, el relieve y las nubes, que además proyectan sombra. Las nubes son una segunda esfera apenas más grande y la atmósfera es una tercera con brillo en el borde. El pin es HTML: en cada frame se proyecta la latitud y longitud del taller a la pantalla. Al hacer clic, una timeline gira el globo hasta dejar Whittier de frente y lanza la cámara al suelo acelerando (atraviesa las nubes); un post-procesado aplica desenfoque radial y el mapa de Google aparece desde ese mismo desenfoque. Volver reproduce la timeline al revés."
+        summary="La Tierra es una esfera con un shader propio que mezcla cinco texturas de la NASA: el día (Blue Marble), las luces de ciudades en el lado nocturno (Black Marble), una máscara de agua para el reflejo del sol, el relieve y las nubes, que además proyectan sombra. Las nubes son una segunda esfera apenas más grande y la atmósfera es una tercera con brillo en el borde. El pin es HTML: en cada frame se proyecta la latitud y longitud del taller a la pantalla. Con el scroll la sección se fija y una timeline gira el globo hasta dejar Whittier de frente y lanza la cámara al suelo acelerando (atraviesa las nubes); un post-procesado aplica desenfoque radial, el mapa satelital de Google aparece desde ese mismo desenfoque y, ya a pantalla completa, aparece la ficha del taller. Al subir, todo corre al revés."
         tools={[
           { name: "Three.js ShaderMaterial", role: "Día/noche, luces de ciudades, reflejo en el agua, relieve, sombra de nubes y atmósfera." },
           { name: "Texturas NASA (Blue Marble, Black Marble)", role: "Imágenes de dominio público en public/3d/earth." },
           { name: "WebGLRenderTarget + shader de post-procesado", role: "Desenfoque radial que simula la velocidad del viaje." },
           { name: "Vector3.project", role: "Coloca el pin HTML sobre Whittier y lo oculta cuando queda detrás del globo." },
-          { name: "GSAP timeline (play / reverse)", role: "Giro, caída de la cámara con expo.in, aparición del mapa y regreso." },
-          { name: "Google Maps embed", role: "Mapa interactivo del taller; el iframe se carga durante el vuelo." },
+          { name: "GSAP ScrollTrigger (pin + scrub)", role: "Fija la sección y convierte el scroll en giro, caída de la cámara con expo.in, mapa y ficha." },
+          { name: "Google Maps embed (satélite)", role: "Mapa interactivo del taller; el iframe se carga al empezar el scroll." },
           { name: "@fontsource (Roboto Mono, Michroma)", role: "Tipografías del diseño servidas desde el propio sitio." },
         ]}
         file="components/models3d/GlobePrestige.js · public/3d/earth/"

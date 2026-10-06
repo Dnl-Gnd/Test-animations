@@ -20,6 +20,7 @@ Abre http://localhost:3000
 | GLSL (shaders) | Calcular posición y color en la GPU (ruido, deformaciones, niebla) |
 | GSAP + ScrollTrigger | Animaciones, suavizado del mouse y animaciones controladas por scroll |
 | GSAP SplitText | Divide textos en letras para animarlas |
+| @fontsource (Roboto Mono, Michroma) | Tipografías del globo de Prestige, servidas desde el sitio |
 | @gsap/react (`useGSAP`) | Limpia automáticamente las animaciones cuando el componente se desmonta |
 | Lenis | Scroll suave, sincronizado con `gsap.ticker` |
 
@@ -55,6 +56,22 @@ Cada página en `/proyecto/[slug]` tiene su propio par de animaciones debajo del
 | Brasa | Sonido interactivo | `components/projects/brasa/EmberSynth.js` | Web Audio (osciladores, delay, analizador) + visualizador en Canvas 2D |
 
 `components/projects/ProjectSections.js` decide qué secciones van en cada página.
+
+## Animaciones 3D (`/3d/[slug]`)
+
+| Página | Animación | Archivos | Técnica principal |
+|---|---|---|---|
+| Pluma | Sólido que se deshace en partículas | `components/models3d/PlumaParticles.js` | Malla con relieve desde imagen + `Points` con física de resorte |
+| Planeta → Logo | Planeta que se derrite y se vuelve el logo | `components/models3d/LogoPlaneta.js`, `blender/logo_planeta.py` | Shape key de Blender → morph target en three.js + `onBeforeCompile` + nébulas en GLSL |
+| Globo → Prestige | Tierra realista con pin; viaje a gran velocidad hasta el mapa del taller | `components/models3d/GlobePrestige.js`, `public/3d/earth/` | Shader de Tierra (día/noche, agua, nubes, atmósfera) + desenfoque radial en post-procesado + Google Maps embed |
+
+Para regenerar el modelo del logo (`public/3d/logo-planeta.glb`) después de cambiar la silueta o el planeta en el script:
+
+```bash
+blender --background --python blender/logo_planeta.py
+# con video (render/logo-planeta_*.mp4):
+blender --background --python blender/logo_planeta.py -- --render
+```
 
 ## Estructura
 

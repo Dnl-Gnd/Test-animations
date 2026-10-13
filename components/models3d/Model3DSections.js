@@ -1,6 +1,7 @@
 import PlumaParticles from "@/components/models3d/PlumaParticles";
 import LogoPlaneta from "@/components/models3d/LogoPlaneta";
 import GlobePrestige from "@/components/models3d/GlobePrestige";
+import NauFest3D from "@/components/models3d/NauFest3D";
 import DemoInfo from "@/components/DemoInfo";
 
 /**
@@ -77,7 +78,30 @@ function GloboPrestige() {
   );
 }
 
-const SECTIONS = { pluma: Pluma, "planeta-logo": PlanetaLogo, "globo-prestige": GloboPrestige };
+function NauFest() {
+  return (
+    <>
+      <NauFest3D />
+      <DemoInfo
+        kicker="NAU FEST 2026"
+        title="Un logo de capas que se arma en 3D"
+        summary="Las letras NAU se reconstruyeron a partir del PNG como polígonos con esquinas redondeadas y, como en el logo original, cada una tiene tres capas: la letra sólida (extruida con bisel), una lámina translúcida delante y un contorno fino desplazado. FEST no es una tipografía: cada trazo del pincel es un tubo que sigue el recorrido de la pincelada, aplanado y afinado en las puntas, con un degradado lima, verde y turquesa con vetas de ruido. Con el scroll la sección se fija: las letras llegan girando desde el fondo, las capas se juntan, los contornos se dibujan y FEST se pinta trazo a trazo hasta que aparece 2026. Debajo, la información del evento con los colores del banner."
+        tools={[
+          { name: "Three.js ExtrudeGeometry", role: "Letras sólidas con bisel y láminas translúcidas a partir de los polígonos." },
+          { name: "Line2 + LineMaterial (dashed)", role: "Contornos finos con grosor en píxeles; el dashOffset los dibuja." },
+          { name: "TubeGeometry + CatmullRomCurve3", role: "Trazos de FEST: tubo aplanado con puntas redondeadas." },
+          { name: "MeshStandardMaterial + onBeforeCompile", role: "Degradado y vetas del pincel; recorte que pinta cada trazo." },
+          { name: "MeshPhysicalMaterial + RoomEnvironment", role: "Barniz de las letras y brillo de las láminas." },
+          { name: "GSAP ScrollTrigger (pin + scrub)", role: "Llegada de letras → capas → contornos → pincel → 2026." },
+          { name: "@fontsource/montserrat", role: "La tipografía del banner, servida desde el sitio." },
+        ]}
+        file="components/models3d/NauFest3D.js · lib/naufestShapes.js"
+      />
+    </>
+  );
+}
+
+const SECTIONS = { pluma: Pluma, "planeta-logo": PlanetaLogo, "globo-prestige": GloboPrestige, "nau-fest": NauFest };
 
 export default function Model3DSections({ model }) {
   const Sections = SECTIONS[model.slug];
